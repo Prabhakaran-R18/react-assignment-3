@@ -7,14 +7,16 @@ function Timer() {
     const timer = setInterval(() => {
       setTime(new Date().toLocaleTimeString());
     }, 1000);
-
-    return () => clearInterval(timer); // cleanup
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <div style={{ marginTop: '20px' }}>
-      <h2>Timer using useEffect</h2>
-      <p>Current Time: {time}</p>
+    <div className="card">
+      <h2>
+        <span role="img" aria-label="clock" style={{marginRight: 6}}>🕒</span>
+        Live Clock
+      </h2>
+      <p className="clock-value">{time}</p>
     </div>
   );
 }
