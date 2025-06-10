@@ -8,7 +8,7 @@ function App() {
       <header className="App-header">
         <h1>
           <span role="img" aria-label="lightning" style={{marginRight: 8}}>⚡</span>
-          React Assignment 3
+          PlanWise
         </h1>
         <p className="subtitle">
           <span role="img" aria-label="clock" style={{marginRight: 4}}>⏰</span>
