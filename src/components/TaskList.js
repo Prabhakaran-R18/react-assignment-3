@@ -1,32 +1,27 @@
 import React from 'react';
+import './TaskList.css';
 
-function TaskList({ tasks, completeTask, deleteTask, completed }) {
-  if (tasks.length === 0) return <p className="empty">No tasks.</p>;
-
+const TaskList = ({ tasks, onDeleteTask, onToggleComplete }) => {
   return (
     <ul className="task-list">
-      {tasks.map(task => (
-        <li key={task.id} className={`task-card${task.completed ? ' completed' : ''}`}>
-          <div>
-            <strong>{task.title}</strong>
-            {task.category && <span className="category">{task.category}</span>}
-            {task.deadline && (
-              <span className="deadline">
-                Due: {new Date(task.deadline).toLocaleDateString()}
-              </span>
-            )}
-            {task.description && <p className="desc">{task.description}</p>}
+      {tasks.map((task, index) => (
+        <li key={index} className={task.completed ? 'completed' : ''}>
+          <div className="task-info">
+            <input
+              type="checkbox"
+              checked={task.completed}
+              onChange={() => onToggleComplete(index)}
+            />
+            <span>{task.text}</span>
           </div>
-          <div className="task-actions">
-            {!task.completed && (
-              <button onClick={() => completeTask(task.id)} title="Mark as done">✔️</button>
-            )}
-            <button onClick={() => deleteTask(task.id)} title="Delete">🗑️</button>
+          <div className="task-meta">
+            <span className="timestamp">{task.date}</span>
+            <button onClick={() => onDeleteTask(index)}>🗑</button>
           </div>
         </li>
       ))}
     </ul>
   );
-}
+};
 
 export default TaskList;

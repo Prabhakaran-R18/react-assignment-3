@@ -1,29 +1,70 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import TaskForm from './TaskForm';
 import TaskList from './TaskList';
+import './TaskDashboard.css';
 
-function TaskDashboard({ tasks, completeTask, deleteTask, reorderTasks }) {
-  const now = new Date();
+const TaskDashboard = () => {
+  const [tasks, setTasks] = useState(() => {
+    const saved = localStorage.getItem('tasks');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [filter, setFilter] = useState('All');
 
-  const upcoming = tasks.filter(t => !t.completed && (!t.deadline || new Date(t.deadline) >= now));
-  const overdue = tasks.filter(t => !t.completed && t.deadline && new Date(t.deadline) < now);
-  const completed = tasks.filter(t => t.completed);
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
+
+  const addTask = (task) => {
+    setTasks([...tasks, { ...task, completed: false }]);
+  };
+
+  const deleteTask = (index) => {
+    const updated = tasks.filter((_, i) => i !== index);
+    setTasks(updated);
+  };
+
+  const toggleComplete = (index) => {
+    const updated = tasks.map((task, i) =>
+      i === index ? { ...task, completed: !task.completed } : task
+    );
+    setTasks(updated);
+  };
+
+  const deleteAllTasks = () => setTasks([]);
+
+  const deleteCompletedTasks = () =>
+    setTasks(tasks.filter((task) => !task.completed));
+
+  const deletePendingTasks = () =>
+    setTasks(tasks.filter((task) => task.completed));
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === 'Completed') return task.completed;
+    if (filter === 'Pending') return !task.completed;
+    return true;
+  });
 
   return (
     <div className="dashboard">
-      <section>
-        <h2>Upcoming Tasks</h2>
-        <TaskList tasks={upcoming} completeTask={completeTask} deleteTask={deleteTask} />
-      </section>
-      <section>
-        <h2>Overdue Tasks</h2>
-        <TaskList tasks={overdue} completeTask={completeTask} deleteTask={deleteTask} />
-      </section>
-      <section>
-        <h2>Completed Tasks</h2>
-        <TaskList tasks={completed} completeTask={completeTask} deleteTask={deleteTask} completed />
-      </section>
+      <h1>📅 PlanWise Daily Planner</h1>
+      <TaskForm onAddTask={addTask} />
+      <div className="filters">
+        <button onClick={() => setFilter('All')}>All</button>
+        <button onClick={() => setFilter('Pending')}>Pending</button>
+        <button onClick={() => setFilter('Completed')}>Completed</button>
+      </div>
+      <div className="actions">
+        <button className="danger" onClick={deleteAllTasks}>🗑 Delete All</button>
+        <button className="warning" onClick={deletePendingTasks}>🕒 Delete Pending</button>
+        <button className="success" onClick={deleteCompletedTasks}>✅ Delete Completed</button>
+      </div>
+      <TaskList
+        tasks={filteredTasks}
+        onDeleteTask={deleteTask}
+        onToggleComplete={toggleComplete}
+      />
     </div>
   );
-}
+};
 
 export default TaskDashboard;

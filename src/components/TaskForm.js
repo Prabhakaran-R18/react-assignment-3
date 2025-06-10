@@ -1,57 +1,27 @@
 import React, { useState } from 'react';
+import './TaskForm.css';
 
-function TaskForm({ addTask }) {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
-  const [deadline, setDeadline] = useState('');
-  const [description, setDescription] = useState('');
+const TaskForm = ({ onAddTask }) => {
+  const [taskText, setTaskText] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!title) return;
-    addTask({
-      id: Date.now(),
-      title,
-      category,
-      deadline,
-      description,
-      completed: false,
-      createdAt: new Date()
-    });
-    setTitle('');
-    setCategory('');
-    setDeadline('');
-    setDescription('');
+    if (!taskText.trim()) return;
+    onAddTask({ text: taskText, date: new Date().toLocaleString() });
+    setTaskText('');
   };
 
   return (
     <form className="task-form" onSubmit={handleSubmit}>
       <input
         type="text"
-        placeholder="Task title"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-        required
+        placeholder="Add a new task..."
+        value={taskText}
+        onChange={(e) => setTaskText(e.target.value)}
       />
-      <input
-        type="text"
-        placeholder="Category"
-        value={category}
-        onChange={e => setCategory(e.target.value)}
-      />
-      <input
-        type="date"
-        value={deadline}
-        onChange={e => setDeadline(e.target.value)}
-      />
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={e => setDescription(e.target.value)}
-      />
-      <button type="submit">Add Task</button>
+      <button type="submit">Add</button>
     </form>
   );
-}
+};
 
 export default TaskForm;
