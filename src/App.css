@@ -3,3 +3,44 @@
   background: linear-gradient(to right, #dfe9f3, #ffffff);
   padding: 40px 20px;
 }
+
+/* Media Queries for Mobile Responsiveness */
+@media screen and (max-width: 768px) {
+  .App {
+    padding: 20px 10px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .App {
+    padding: 15px 8px;
+  }
+}
+
+/* Add responsive styles for other components */
+@media screen and (max-width: 480px) {
+  /* Adjust font sizes */
+  h1, h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  /* Make buttons more touch-friendly */
+  button {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 10px 15px;
+  }
+
+  /* Adjust input fields */
+  input, select, textarea {
+    font-size: 16px; /* Prevents iOS zoom on focus */
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
+
+  /* Stack elements vertically on mobile */
+  .row, .flex-container {
+    flex-direction: column;
+  }
+}
